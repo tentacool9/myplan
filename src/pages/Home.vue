@@ -24,13 +24,14 @@
           <p class="lead" style="font-size: 25px">OUR TOP DESTINATIONS</p>
       </div>
       <div class="row">
-            <div @click="change(country.name)" v-for="country in countryObjects" class="col-sm-3"><DestinationBox v-bind:locationName="country.name" v-bind:imgLink="country.img" ></DestinationBox></div>
+            <div @click="change(country.country)" v-for="country in countryObjects" class="col-sm-3"><DestinationBox v-bind:locationName="country.country" v-bind:imgLink="country.img" ></DestinationBox></div>
       </div>
     </div>
 </div>
 </template>
 
 <script>
+import axios from 'axios';
 import DestinationBox from '../components/DestinationBox.vue'
 export default {
     
@@ -41,7 +42,7 @@ export default {
   },
   data()  {
       return {
-        countryObjects: require('../db.js'),
+        countryObjects: null,
         search: ""
       }
   },
@@ -51,6 +52,10 @@ export default {
         this.$store.state.selectedLocation = location;
         this.$router.push('/order');
     }
+  },
+
+  mounted() {
+    axios.get('http://localhost:3000/topCountries').then(response => (this.countryObjects = response.data));
   }
 }
 </script>
