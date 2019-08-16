@@ -14,7 +14,7 @@
       <div class="col-md-6 offset-md-3"> 
       <div class="input-group input-group-lg container">
             <div class="input-group-prepend">
-            <span @click="change(search)" class="input-group-text" id="inputGroup-sizing-lg">Search</span>
+            <span  @click="change(search)" class="input-group-text" id="inputGroup-sizing-lg">Search</span>
             </div>
             <input v-model="search" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="Find the best plan for your destination...">
       </div>
@@ -24,7 +24,7 @@
           <p class="lead" style="font-size: 25px">OUR TOP DESTINATIONS</p>
       </div>
       <div class="row">
-            <div @click="change(country.country)" v-for="country in countryObjects" class="col-sm-3"><DestinationBox v-bind:locationName="country.country" v-bind:imgLink="country.img" ></DestinationBox></div>
+            <div @click="change(country.country)" v-for="country in countryObjects" class="col-sm-3" v-bind:key="country.country"><DestinationBox    v-bind:locationName="country.country" v-bind:imgLink="country.img" ></DestinationBox></div>
       </div>
     </div>
 </div>
@@ -33,6 +33,7 @@
 <script>
 import axios from 'axios';
 import DestinationBox from '../components/DestinationBox.vue'
+import VueSweetalert2 from 'vue-sweetalert2';
 export default {
     
   name: 'Home',
@@ -50,7 +51,19 @@ export default {
   methods: {
     change: function(location) {
         this.$store.state.selectedLocation = location;
-        this.$router.push('/order');
+        
+        axios.get('http://localhost:3000/countryPlans/?name=' + location + "&plan=" + this.$store.state.nextPlan).then(response => {
+          this.$store.state.planArray = response.data;
+          if(this.$store.state.planArray.length > 0) {
+            this.$router.push('/order');
+          
+            this.$store.state.nextPlan = this.$store.state.planArray[this.$store.state.planArray.length-1].id;
+              console.log(this.$store.state.nextPlan)
+          } else {
+            this.$swal("No plans found", "Try another location", "error");
+          }
+        }).catch(error =>  this.$swal("Something happened", "Were working on it...", "error"));
+        
     }
   },
 

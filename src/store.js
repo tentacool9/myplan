@@ -6,6 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
       selectedLocation: null,
+      planArray: null,
+      nextPlan: 0
   },
   mutations: {
 
