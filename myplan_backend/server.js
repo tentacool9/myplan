@@ -53,6 +53,7 @@ app.post('/clientData', function (req, res) {
     // Use ip-api to get client geolocation and other info
     axios.get('http://ip-api.com/json/' + req.body.cli).then(response => {
       var data = response.data;
+      data["choice"] = req.body.choice;
       //console.log(data);
       dbo.collection("clients").insertOne(data, function(err, res) {
         if (err) throw err;

@@ -68,18 +68,7 @@ export default {
   },
 
   mounted() {
-    axios.get("https://jsonip.com?callback=?").then(response => { 
-      // response?
-      console.log(response.data)
-      var info =  JSON.parse(response.data.match(/{.*}/)[0]);
-      axios({
-      method: 'post',
-      url: 'http://localhost:3000/clientData',
-      data: {
-        cli: info.ip
-      }
-      });
-    })
+
     axios.get('http://localhost:3000/topCountries').then(response => (this.countryObjects = response.data));
   }
 }

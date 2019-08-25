@@ -19,7 +19,7 @@
 
 <style>
 #app {
-      background:  url(https://media1.giphy.com/media/xT1R9YPd10kvCkDGlW/giphy.gif?cid=790b76115ccc3c6d59644f662e2ff058&rid=giphy.gif) no-repeat center center fixed; 
+ background:  url(https://media1.giphy.com/media/xT1R9YPd10kvCkDGlW/giphy.gif?cid=790b76115ccc3c6d59644f662e2ff058&rid=giphy.gif) no-repeat center center fixed;  
   background-size: cover;
 }
 .application {

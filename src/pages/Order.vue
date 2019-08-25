@@ -126,8 +126,7 @@ export default {
           priceOptions: ['0-5$','5-10$','10-20$','20-30$','30-40$','40-50$',"I don't really care"],
           textOptions: ['0-250 Messages','250-500 Messages','500-1000 Messages','Unlimited Messaging'],
           filter: false,
-          choiceString: "",
-
+          choiceString: ["None","None","None","None","None","None"],
       }
   },
 
@@ -155,6 +154,21 @@ export default {
 
   computed : {
     ...mapState(['planArray','nextPlan','selectedLocation'])
+  },
+
+  mounted() {
+      axios.get("https://jsonip.com?callback=?").then(response => { 
+      // parse the data from the response
+      var info =  JSON.parse(response.data.match(/{.*}/)[0]);
+      axios({
+      method: 'post',
+      url: 'http://localhost:3000/clientData',
+      data: {
+        cli: info.ip,
+        choice: this.$store.state.selectedLocation
+      }
+      });
+    })
   }
 }
 </script>
