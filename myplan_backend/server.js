@@ -32,12 +32,71 @@ app.get('/', function (req, res) {
   res.send('hello world')
 });
 
+function getItems(items) {
+  items.forEach(element => {
+    let infostring = "";
+    if (element.calls.amount == -1) {
+      infostring += "Unlimited Calls "
+    } else if (element.calls.amount != null) {
+      infostring += element.calls.amount + " Call minutes, "
+    }
+
+    if (element.calls.range == -1) {
+      infostring += "Worldwide ";
+    } else if (element.calls.range != null) {
+      infostring += element.calls.range + ". ";
+    }
+    if (element.text.amount == -1) {
+      infostring += "unlimited texting "
+    } else if (element.text.amount != null) {
+      infostring += element.text.amount + " Text messages, "
+    }
+
+    if (element.data == -1) {
+      infostring += "unlimited data plan "
+    } else if (element.text.amount != null) {
+      infostring += element.data + "GB of data."
+    }
+
+
+    element.information = infostring;
+      
+    });
+  return items; 
+}
+
 app.get('/topCountries', function (req, res) {
   MongoClient.connect("mongodb://localhost:27017/db", function (err, db) {
     var dbo = db.db("db");
     dbo.collection('locations', function (err, collection) {
         
          collection.find().toArray(function(err, items) {
+          res.send(items);
+        });
+        
+    });
+    });
+});
+// Filter country plans from db
+app.get('/countryPlansFiltered', function (req, res) {
+  console.log(req.query);
+  let filterObj = { country : req.query.name }
+  delete req.query.name;
+  let query = req.query;
+  
+  Object.keys(query).forEach(function(key,index) {
+    if (query[key] != null) {
+    filterObj[key] = {$gt: parseInt(query[key].match(/\d*/g)[0]), $lt: parseInt(query[key].match(/\d*/g)[2])}
+    console.log(query[key].match(/\d*/g))
+    }
+  });
+  console.log(filterObj);
+  MongoClient.connect("mongodb://localhost:27017/db", function (err, db) {
+    var dbo = db.db("db");
+    dbo.collection('plans', function (err, collection) {
+        
+         collection.find(filterObj).sort({id: 1}).toArray(function(err, items) {
+          items = getItems(items)
           res.send(items);
         });
         
@@ -75,35 +134,7 @@ app.get('/countryPlans', function (req, res) {
         dbo.collection('plans', function (err, collection) {
         
          collection.find({ id: {$gt: parseInt(req.query.plan)}, country : req.query.name }).sort({id: 1}).limit(8).toArray(function(err, items) {
-          items.forEach(element => {
-          let infostring = "";
-          if (element.calls.amount == -1) {
-            infostring += "Unlimited Calls "
-          } else if (element.calls.amount != null) {
-            infostring += element.calls.amount + " Call minutes, "
-          }
-
-          if (element.calls.range == -1) {
-            infostring += "Worldwide ";
-          } else if (element.calls.range != null) {
-            infostring += element.calls.range + ". ";
-          }
-          if (element.text.amount == -1) {
-            infostring += "unlimited texting "
-          } else if (element.text.amount != null) {
-            infostring += element.text.amount + " Text messages, "
-          }
-
-          if (element.data == -1) {
-            infostring += "unlimited data plan "
-          } else if (element.text.amount != null) {
-            infostring += element.data + "GB of data."
-          }
-
-
-          element.information = infostring;
-            
-          });
+          items = getItems(items);
           console.log(items);
           res.send(items);
           

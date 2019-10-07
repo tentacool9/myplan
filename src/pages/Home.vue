@@ -10,7 +10,7 @@
   </div>
   </div>
   <div class="container-fluid">
-      <div class="row" style="padding: 40px; margin-bottom: 40px">
+      <div class="row" style="padding: 40px; margin-bottom: 40px;">
       <div class="col-md-6 offset-md-3"> 
       <div class="input-group input-group-lg container">
             <div class="input-group-prepend">

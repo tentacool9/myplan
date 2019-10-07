@@ -6,37 +6,43 @@
         <p class="lead">We want to find you good deals, but we need to know what youre looking for.</p>
       </div>
     </div>
+
 <div  class="contaxiner-fluid" style="background-color: white; padding: 5px; margin-bottom: 60px; line-height: 50px;">
-<button type="button" class="btn  btn-light lead filter" style="padding-left: 10px;" @click="f => {this.filter = !this.filter}">{{this.filter == false ? "Find a plan that matches you" : "Close filter"  }}</button>
-    
-  <div class="container" style="margin-top: 30px" v-if="this.filter">
+<div class="" style="        
+border-bottom: 1px;
+border-bottom-color: grey;
+border-bottom-style: solid; " @click="f => {this.filter = !this.filter}">{{this.filter == false ? '[Click to open filter]' : '[Close filter]'  }}</div>
+<!-- The expanding filter -->
+<!-- transition to be implemented -->
+<transition  name="slide-fade">
+  <div class="container" style="margin-top: 30px;" v-if="this.filter" >
   <form style="display: flex; flex-direction: row; justify-content: space-between">
       <div class="form-group filter" style="text-align: left" id="Calls">
         <label for="Calls" style="font-weight: 700">Call Minutes:</label>
-          <div class=" " v-for="option in callOptions" v-bind:key="option" >
-              <input type="radio" v-bind:id="option" name="customRadioInline6" class="custom-control-input" >
-              <label class="custom-control-label" v-bind:for="option">{{option}}</label>
+          <div class=" " v-for="option in callOptions.array" v-bind:key="callOptions.type + option[0]" >
+              <input type="radio" v-bind:id="option[0] + callOptions.type" name="customRadioInline6" class="custom-control-input" >
+              <label class="custom-control-label" @click="filterAdd(option, callOptions.type)"  v-bind:for="option[0] + callOptions.type">{{option[0]}}-{{option[1]}}Min</label>
           </div>
       </div>
       <div class="form-group filter" style="text-align: left;" id="Data">
             <label for="Data" style="font-weight: 700">Data</label>
-          <div v-for="option in dataOptions" v-bind:key="option" class="" >
-              <input type="radio" v-bind:id="option" name="customRadioInline3" class="custom-control-input">
-              <label class="custom-control-label" v-bind:for="option">{{option}}</label >
+          <div v-for="option in dataOptions.array" v-bind:key="dataOptions.type + option[0]"  >
+              <input type="radio" v-bind:id="dataOptions.type + option[0]" name="customRadioInline3" class="custom-control-input">
+              <label class="custom-control-label" @click="filterAdd(option, dataOptions.type)" v-bind:for="dataOptions.type + option[0]">{{option[0]}}-{{option[1]}}GB</label >
           </div>
       </div>
       <div class="form-group filter" style="text-align: left" id="Price">
             <label for="Price" style="font-weight: 700">Price</label>
-          <div v-for="option in priceOptions" v-bind:key="option" class=" " >
-              <input type="radio" v-bind:id="option" name="customRadioInline4" class="custom-control-input">
-              <label class="custom-control-label" v-bind:for="option">{{option}}</label>
+          <div v-for="option in priceOptions.array" v-bind:key="priceOptions.type + option[0]"  >
+              <input type="radio" v-bind:id="priceOptions.type + option[0]" name="customRadioInline4" class="custom-control-input">
+              <label class="custom-control-label" @click="filterAdd(option, priceOptions.type)" v-bind:for="priceOptions.type + option[0]">{{option[0]}}-{{option[1]}}$</label>
           </div>
       </div>
       <div class="form-group filter" style="text-align: left" id="Texting">
             <label for="Texting" style="font-weight: 700">Texting</label>
-          <div v-for="option in textOptions" v-bind:key="option" class=" " >
-              <input type="radio" v-bind:id="option" name="customRadioInline5" class="custom-control-input">
-              <label class="custom-control-label" v-bind:for="option">{{option}}</label>
+          <div v-for="option in textOptions.array" v-bind:key="priceOptions.type + option[0]">
+              <input type="radio" v-bind:id="option[0] + textOptions.type" name="customRadioInline5" class="custom-control-input">
+              <label class="custom-control-label"  @click="filterAdd(option, textOptions.type)" v-bind:for="option[0] + textOptions.type">{{option[0]}}-{{option[1]}} Messages</label>
           </div>
       </div>
       <!-- Hardcoded -->
@@ -44,22 +50,22 @@
             <label for="For how long?">For how long?</label>
           <div class=" " style="display: ;">
               <input type="radio" id="customRadioInline3" name="customRadioInline2" class="custom-control-input">
-              <label class="custom-control-label" for="customRadioInline3">30 Days / 1 Month</label>
+              <label class="custom-control-label" for="customRadioInline3" @click='filterAdd(30,"time")'>30 Days / 1 Month</label>
           </div>
           <div class="" style="margin-bottom: 100px">
               <input type="radio" id="customRadioInline4" name="customRadioInline2" class="custom-control-input">
-              <label class="custom-control-label" for="customRadioInline4">14 Days</label>
+              <label class="custom-control-label" for="customRadioInline4" @click='filterAdd(14,"time")' >14 Days</label>
           </div>
       </div>
       
 
 
     </form>
-          <button type="button" class="btn btn-success">Find me a match</button>
+          <div class="" @click="queryFilter()">[Find me a match]</div>
         
     </div>
-
-
+</transition>
+<!-- End of expanding filter -->
 <!-- The Modal -->
 
 <div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
@@ -83,7 +89,7 @@
 </div>
 </div>
       
-
+<!-- The plan table -->
     <div class="container">
     <div class="row">
       <div v-bind:key="data.id" v-for="data in planArray" class="col-md-3"  style="margin-bottom: 50px"><DataBox :company="data.company" :pricing="data.price" :info="data.information"></DataBox></div>
@@ -121,20 +127,20 @@ export default {
               {company: "Bell", pricing: "30$"},
               
           ],
-          callOptions: ['0-250 Minutes','250-500 Minutes','500-1000 Minutes','Unlimited Calls'],
-          dataOptions: ['0-1GB','1-3GB','3-5GB','Unlimited'],
-          priceOptions: ['0-5$','5-10$','10-20$','20-30$','30-40$','40-50$',"I don't really care"],
-          textOptions: ['0-250 Messages','250-500 Messages','500-1000 Messages','Unlimited Messaging'],
+          callOptions: {type: "calls", array: [[0,250],[250,500],[500,1000]]},
+          dataOptions: {type: "data", array: [[0,1],[1,3],[3,5]]},
+          priceOptions: {type: "price", array: [[0,5],[5,10],[10,20],[20,30],[30,40],[40,50]]},
+          textOptions: {type: "text", array: [[0,250],[250,500],[500,1000]]},
           filter: false,
-          choiceString: ["None","None","None","None","None","None"],
+          filterChosen: {}
       }
   },
 
   methods: {
-      close() {
+      close: function() {
           $('#exampleModal').hide('slow');
       },   
-      more() {
+      more: function() {
         console.log(this.nextPlan);
         axios.get('http://localhost:3000/countryPlans/?name=' + this.selectedLocation + "&plan=" + this.nextPlan).then(response => {
           console.log(response.data)
@@ -148,6 +154,30 @@ export default {
             this.$swal("No plans found", "Try another location", "error");
           }
         })
+      },
+      filterAdd: function(option, type) {
+        if (this.filterChosen[type] != undefined) {
+          delete this.filterChosen[type];
+        } else {
+          this.filterChosen[type] = option;
+
+        }
+        console.log(this.filterChosen)
+      },
+      queryFilter: function() {
+        
+        if (this.filterChosen != undefined) {
+          var queryString = "?"
+          var filterObj = Object.assign(this.filterChosen)
+          Object.keys(filterObj).forEach(function(key,index) {
+            queryString += key + '=' + filterObj[key] + '&'
+          });
+          console.log(this.filterChosen)
+          console.log(this.$store.state.selectedLocation)
+          axios.get("http://localhost:3000/countryPlansFiltered/" + queryString.substring(0,queryString.length-1) + '&name=' + this.$store.state.selectedLocation ).then(response => {
+            this.$store.state.planArray = response.data;
+          })
+        }
       },
   },
 
