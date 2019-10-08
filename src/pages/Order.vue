@@ -2,8 +2,9 @@
   <div class="order">
     <div class="jumbotron jumbotron-fluid" style="background-color: white;margin-bottom: 0">
       <div class="container">
-        <h1 class="display-2">{{this.$store.state.selectedLocation}}</h1>
+        <h1 class="display-2"  >{{this.$store.state.selectedLocation}}</h1>
         <p class="lead">We want to find you good deals, but we need to know what youre looking for.</p>
+        <span class="lead">you're saving</span> <span class="display-4" > 32$ </span> <span class="lead">in this location</span>
       </div>
     </div>
 
@@ -61,6 +62,7 @@ border-top-style: solid;background-color: white ;  " @click="f => {this.filter =
 
 
     </form>
+          <Loading v-if="this.isSearched"></Loading>
           <div class="lead" @click="queryFilter()">[click to find a match]</div>
         
     </div>
@@ -105,11 +107,13 @@ import { mapState } from 'vuex'
 import store from '../store';
 import CheckOut from '../components/CheckOut.vue'
 import DataBox from '../components/DataBox.vue';
+import Loading from '../components/Loading.vue'
 export default {
   name: 'Order',
   components : {
       DataBox,
-      CheckOut
+      CheckOut,
+      Loading
   },
   
   data()  {
@@ -132,7 +136,8 @@ export default {
           priceOptions: {type: "price", array: [[0,5],[5,10],[10,20],[20,30],[30,40],[40,50]]},
           textOptions: {type: "text", array: [[0,250],[250,500],[500,1000]]},
           filter: false,
-          filterChosen: {}
+          filterChosen: {},
+          isSearched: false
       }
   },
 
@@ -168,15 +173,24 @@ export default {
         
         if (this.filterChosen != undefined) {
           var queryString = "?"
+          // create the url string
           var filterObj = Object.assign(this.filterChosen)
           Object.keys(filterObj).forEach(function(key,index) {
             queryString += key + '=' + filterObj[key] + '&'
           });
-          console.log(this.filterChosen)
-          console.log(this.$store.state.selectedLocation)
+          // start loading animation
+          this.isSearched = true;
+          // request data from server
           axios.get("http://localhost:3000/countryPlansFiltered/" + queryString.substring(0,queryString.length-1) + '&name=' + this.$store.state.selectedLocation ).then(response => {
+            if(response.data.length < 1) {
+              this.isSearched =  false;
+              this.$swal("No plans found under these parameters", "try a different filter")
+            } else {
+            this.isSearched = false;
             this.$store.state.planArray = response.data;
-          })
+            }
+          }).catch(error =>{ this.$swal("No plans found under these parameters", "try a different filter");
+          this.isSearched = false;} )
         }
       },
   },

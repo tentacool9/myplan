@@ -3,7 +3,7 @@
   <div class="jumbotron jumbotron-fluid" style="margin-top: 0px; padding-top: 0px; padding-bottom: 10px; background-color : rgb(41, 237, 204)">
   <div class="container" >
   <div class="display-1">
-      myplan
+      sim.ple
       <!-- <img  src="../assets/myplanLogo.png" width="325" height="175"> -->
   </div>
     <p class="lead">save money by purchasing local data plans</p>
@@ -20,6 +20,7 @@
       </div>
       </div>
       </div>
+      <Loading v-if="this.isSearched"></Loading>
       <div>
           <p class="lead" style="font-size: 25px">top destinations</p>
       </div>
@@ -34,24 +35,28 @@
 import axios from 'axios';
 import DestinationBox from '../components/DestinationBox.vue'
 import VueSweetalert2 from 'vue-sweetalert2';
+import { mapState } from 'vuex';
+import Loading from '../components/Loading.vue'
 export default {
     
   name: 'Home',
 
   components: {
     DestinationBox,
+    Loading
   },
   data()  {
       return {
         countryObjects: null,
-        search: ""
+        search: "",
+        isSearched: false
       }
   },
     
   methods: {
     change: function(location) {
         this.$store.state.selectedLocation = location;
-        
+        this.isSearched = true;
         axios.get('http://localhost:3000/countryPlans/?name=' + location + "&plan=" + this.$store.state.nextPlan).then(response => {
           this.$store.state.planArray = response.data;
           if(this.$store.state.planArray.length > 0) {
@@ -60,6 +65,7 @@ export default {
             this.$store.state.nextPlan = this.$store.state.planArray[this.$store.state.planArray.length-1].id;
               console.log(this.$store.state.nextPlan)
           } else {
+            this.isSearched = false;
             this.$swal("No plans found", "Try another location", "error");
           }
         }).catch(error =>  this.$swal("Something happened", "Were working on it...", "error"));
@@ -79,5 +85,7 @@ export default {
   font-weight: 200;
   font-size: 18px
 }
+
+
 
 </style>
