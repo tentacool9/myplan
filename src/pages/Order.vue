@@ -2,44 +2,44 @@
   <div class="order">
     <div class="jumbotron jumbotron-fluid" style="background-color: white;margin-bottom: 0">
       <div class="container">
-        <h1 class="display-4">{{this.$store.state.selectedLocation}}</h1>
+        <h1 class="display-2">{{this.$store.state.selectedLocation}}</h1>
         <p class="lead">We want to find you good deals, but we need to know what youre looking for.</p>
       </div>
     </div>
 
 <div  class="contaxiner-fluid" style="background-color: white; padding: 5px; margin-bottom: 60px; line-height: 50px;">
-<div class="" style="        
-border-bottom: 1px;
-border-bottom-color: grey;
-border-bottom-style: solid; " @click="f => {this.filter = !this.filter}">{{this.filter == false ? '[Click to open filter]' : '[Close filter]'  }}</div>
+<div class="lead" style="        
+border-top: 1px;
+border-top-color: grey;
+border-top-style: solid;background-color: white ;  " @click="f => {this.filter = !this.filter}">{{this.filter == false ? '[click to open filter]' : '[close filter]'  }}</div>
 <!-- The expanding filter -->
 <!-- transition to be implemented -->
 <transition  name="slide-fade">
   <div class="container" style="margin-top: 30px;" v-if="this.filter" >
   <form style="display: flex; flex-direction: row; justify-content: space-between">
-      <div class="form-group filter" style="text-align: left" id="Calls">
-        <label for="Calls" style="font-weight: 700">Call Minutes:</label>
+      <div class="form-group lead filter" style="text-align: left" id="Calls">
+        <label for="Calls" class="lead" style="">Call Minutes:</label>
           <div class=" " v-for="option in callOptions.array" v-bind:key="callOptions.type + option[0]" >
               <input type="radio" v-bind:id="option[0] + callOptions.type" name="customRadioInline6" class="custom-control-input" >
               <label class="custom-control-label" @click="filterAdd(option, callOptions.type)"  v-bind:for="option[0] + callOptions.type">{{option[0]}}-{{option[1]}}Min</label>
           </div>
       </div>
-      <div class="form-group filter" style="text-align: left;" id="Data">
-            <label for="Data" style="font-weight: 700">Data</label>
+      <div class="form-group lead filter" style="text-align: left;" id="Data">
+            <label for="Data" class="lead" style="">Data</label>
           <div v-for="option in dataOptions.array" v-bind:key="dataOptions.type + option[0]"  >
               <input type="radio" v-bind:id="dataOptions.type + option[0]" name="customRadioInline3" class="custom-control-input">
               <label class="custom-control-label" @click="filterAdd(option, dataOptions.type)" v-bind:for="dataOptions.type + option[0]">{{option[0]}}-{{option[1]}}GB</label >
           </div>
       </div>
-      <div class="form-group filter" style="text-align: left" id="Price">
-            <label for="Price" style="font-weight: 700">Price</label>
+      <div class="form-group lead filter" style="text-align: left" id="Price">
+            <label for="Price" class="lead">Price</label>
           <div v-for="option in priceOptions.array" v-bind:key="priceOptions.type + option[0]"  >
               <input type="radio" v-bind:id="priceOptions.type + option[0]" name="customRadioInline4" class="custom-control-input">
               <label class="custom-control-label" @click="filterAdd(option, priceOptions.type)" v-bind:for="priceOptions.type + option[0]">{{option[0]}}-{{option[1]}}$</label>
           </div>
       </div>
-      <div class="form-group filter" style="text-align: left" id="Texting">
-            <label for="Texting" style="font-weight: 700">Texting</label>
+      <div class="form-group filter lead" style="text-align: left" id="Texting">
+            <label for="Texting" class="lead" style="">Texting</label>
           <div v-for="option in textOptions.array" v-bind:key="priceOptions.type + option[0]">
               <input type="radio" v-bind:id="option[0] + textOptions.type" name="customRadioInline5" class="custom-control-input">
               <label class="custom-control-label"  @click="filterAdd(option, textOptions.type)" v-bind:for="option[0] + textOptions.type">{{option[0]}}-{{option[1]}} Messages</label>
@@ -47,21 +47,21 @@ border-bottom-style: solid; " @click="f => {this.filter = !this.filter}">{{this.
       </div>
       <!-- Hardcoded -->
       <div class="form-group" style="text-align: left; margin-left: 30px" id="For how long?" >
-            <label for="For how long?">For how long?</label>
+            <label class="lead" for="For how long?">For how long?</label>
           <div class=" " style="display: ;">
               <input type="radio" id="customRadioInline3" name="customRadioInline2" class="custom-control-input">
-              <label class="custom-control-label" for="customRadioInline3" @click='filterAdd(30,"time")'>30 Days / 1 Month</label>
+              <label class="lead custom-control-label" for="customRadioInline3" @click='filterAdd(30,"time")'>30 Days / 1 Month</label>
           </div>
           <div class="" style="margin-bottom: 100px">
               <input type="radio" id="customRadioInline4" name="customRadioInline2" class="custom-control-input">
-              <label class="custom-control-label" for="customRadioInline4" @click='filterAdd(14,"time")' >14 Days</label>
+              <label class="lead custom-control-label" for="customRadioInline4" @click='filterAdd(14,"time")' >14 Days</label>
           </div>
       </div>
       
 
 
     </form>
-          <div class="" @click="queryFilter()">[Find me a match]</div>
+          <div class="lead" @click="queryFilter()">[click to find a match]</div>
         
     </div>
 </transition>
@@ -206,8 +206,8 @@ export default {
 <style>
 .filter {
   border-radius: 10px;
-  border-width: 1px;
-  border-color: black;
+  border-width: 0.5px;
+  border-color: grey;
   border-style: solid;
   padding-left: 30px;
   padding-right: 10px;

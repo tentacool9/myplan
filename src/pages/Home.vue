@@ -2,11 +2,11 @@
 <div class="home">
   <div class="jumbotron jumbotron-fluid" style="margin-top: 0px; padding-top: 0px; padding-bottom: 10px; background-color : rgb(41, 237, 204)">
   <div class="container" >
-  <div class="display-4">
-      
-      <img  src="../assets/myplanLogo.png" width="325" height="175">
+  <div class="display-1">
+      myplan
+      <!-- <img  src="../assets/myplanLogo.png" width="325" height="175"> -->
   </div>
-    <p class="lead">A modern solution to a modern problem.</p>
+    <p class="lead">save money by purchasing local data plans</p>
   </div>
   </div>
   <div class="container-fluid">
@@ -14,14 +14,14 @@
       <div class="col-md-6 offset-md-3"> 
       <div class="input-group input-group-lg container">
             <div class="input-group-prepend">
-            <span  @click="change(search)" class="input-group-text" id="inputGroup-sizing-lg">Search</span>
+            <span  @click="change(search)" class="input-group-text" id="inputGroup-sizing-lg">search</span>
             </div>
-            <input v-model="search" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="Find the best plan for your destination...">
+            <input v-model="search"  type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" placeholder="find the best plan for your destination...">
       </div>
       </div>
       </div>
       <div>
-          <p class="lead" style="font-size: 25px">OUR TOP DESTINATIONS</p>
+          <p class="lead" style="font-size: 25px">top destinations</p>
       </div>
       <div class="row">
             <div @click="change(country.country)" v-for="country in countryObjects" class="col-sm-3" v-bind:key="country.country"><DestinationBox    v-bind:locationName="country.country" v-bind:imgLink="country.img" ></DestinationBox></div>
@@ -74,6 +74,10 @@ export default {
 }
 </script>
 <style>
-
+.form-control::placeholder {
+  color: black;
+  font-weight: 200;
+  font-size: 18px
+}
 
 </style>

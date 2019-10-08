@@ -3,7 +3,7 @@
    <div class="card cardFix">
   <img v-bind:src='imgLink' class="card-img-top" width='150' height='150'>
   <div class=" cardEdit card-body">
-      <p class="displayText">{{locationName}}</p>
+      <p class="display-4" style="font-size: 30px;">{{locationName}}</p>
 </div>
 </div>
   </div>
@@ -21,11 +21,7 @@ export default {
 }
 </script>
 <style>
-    .displayText {
-        font-size: 20px;
-        color: black;
-        margin-bottom: 10px;
-    }
+
     .cardEdit {
         padding: 0px;
         padding-bottom: 0px;
@@ -35,7 +31,7 @@ export default {
     
     .cardFix {
         opacity: 1;
-        border-width: 0;
+        border-width: 1;
         margin-bottom: 100px;
     }
     @keyframes shine {
